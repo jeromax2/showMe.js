@@ -58,7 +58,6 @@ function showMe(pSelecteur){
 	    return false;
 	});
 	$(pSelecteur).on("mouseover", function (event){
-		event.preventDefault();
 		var num=$(event.target).attr('showMe_id');
 		if(num==undefined){
 			num=$(event.target).parent().attr('showMe_id');
@@ -76,7 +75,6 @@ function showMe(pSelecteur){
 		}
 	}else if(showMe_A.length>0){//on charge la première image
 		$('#showMe_temp').attr('src',showMe_A[0]['href']);
-		//$('<img/>')[0].src = showMe_A[0]['href'];
 	}
 }
 var colorThief = new ColorThief();
