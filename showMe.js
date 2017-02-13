@@ -47,6 +47,7 @@ function showMe(pSelecteur){
 		i+=1;
 	})
 	showMe_nbElement=showMe_A.length;
+	$('body').append('<img src="" id="showMe_temp" style="display:none;">')
 	$(pSelecteur).on("click", function (event){
 		event.preventDefault();
 		var num=$(event.target).attr('showMe_id');
@@ -56,6 +57,17 @@ function showMe(pSelecteur){
 		showMe_afficher(parseInt(num));
 	    return false;
 	});
+	$(pSelecteur).on("mouseover", function (event){
+		event.preventDefault();
+		var num=$(event.target).attr('showMe_id');
+		if(num==undefined){
+			num=$(event.target).parent().attr('showMe_id');
+		};
+		if((showMe_A[num]['type']=='img')||(showMe_A[num]['type']=='pdf')||(showMe_A[num]['type']=='vid')){
+			$('#showMe_temp').attr('src',showMe_A[num]['href']);
+		}
+		return false;
+	});
 	var hash=window.location.hash.substr(1);
 	if(hash!=''){
 		hash=parseInt(hash);
@@ -63,7 +75,8 @@ function showMe(pSelecteur){
 			showMe_afficher(hash);//affichage en plein écran d'une photo particulière dès le démarrage
 		}
 	}else if(showMe_A.length>0){//on charge la première image
-		$('<img/>')[0].src = showMe_A[0]['href'];
+		$('#showMe_temp').attr('src',showMe_A[0]['href']);
+		//$('<img/>')[0].src = showMe_A[0]['href'];
 	}
 }
 var colorThief = new ColorThief();
