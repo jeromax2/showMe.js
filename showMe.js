@@ -47,7 +47,7 @@ function showMe(pSelecteur){
 		i+=1;
 	})
 	showMe_nbElement=showMe_A.length;
-	$('body').append('<img src="" id="showMe_temp" style="display:none;">')
+	$('body').append('<object data="" id="showMe_temp" style="display:none;"></object>')
 	$(pSelecteur).on("click", function (event){
 		event.preventDefault();
 		var num=$(event.target).attr('showMe_id');
@@ -63,7 +63,7 @@ function showMe(pSelecteur){
 			num=$(event.target).parent().attr('showMe_id');
 		};
 		if((showMe_A[num]['type']=='img')||(showMe_A[num]['type']=='pdf')||(showMe_A[num]['type']=='vid')){
-			$('#showMe_temp').attr('src',showMe_A[num]['href']);
+			$('#showMe_temp').attr('data',showMe_A[num]['href']);
 		}
 		return false;
 	});
@@ -74,7 +74,7 @@ function showMe(pSelecteur){
 			showMe_afficher(hash);//affichage en plein écran d'une photo particulière dès le démarrage
 		}
 	}else if(showMe_A.length>0){//on charge la première image
-		$('#showMe_temp').attr('src',showMe_A[0]['href']);
+		$('#showMe_temp').attr('data',showMe_A[0]['href']);
 	}
 }
 var colorThief = new ColorThief();
