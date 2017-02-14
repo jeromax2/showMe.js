@@ -13,9 +13,10 @@ var showMe_nbElement=0;
 var showMe_speedEffect=300;
 if(typeof showMe_backgroundColor==="undefined"){var showMe_backgroundColor='#222222';}
 if(typeof showMe_ambilight==="undefined"){var showMe_ambilight=true;}
-
+var urlInitiale='';
 function showMe(pSelecteur){
 	var i=0;
+	urlInitiale=window.location.href;
 	$(pSelecteur).each(function(){
 		$(this).attr('showMe_id',i);
 		showMe_A[i]=new Array();
@@ -62,7 +63,7 @@ function showMe(pSelecteur){
 		if(num==undefined){
 			num=$(event.target).parent().attr('showMe_id');
 		};
-		if((showMe_A[num]['type']=='img')||(showMe_A[num]['type']=='pdf')||(showMe_A[num]['type']=='vid')){
+		if((showMe_A[num]['type']=='img')||(showMe_A[num]['type']=='pdf')||(showMe_A[num]['type']=='vid')||(showMe_A[num]['type']=='iframe')){
 			$('#showMe_temp').attr('data',showMe_A[num]['href']);
 		}
 		return false;
@@ -113,6 +114,7 @@ function showMe_afficher(pElement){
 			}
 			if(event.keyCode==27){$('#showMe_FS').hide();showMe_sortirFullScreen();window.location.href='#';$('#showMe_cadreImg').html('');}
 			});
+		//html+='<div id="showMe_backGround" style="width:100%;height:100%;position:fixed;background-size: cover;"></div>'
 		html+='<div id="showMe_cadreImgExt"><div id="showMe_cadreImg"></div></div><div id="showMe_info"></div>'
 		html+='</div>'
 		$('body').append(html);
@@ -151,8 +153,14 @@ function showMe_afficher(pElement){
 		try{
 			var color=colorThief.getColor($('#showMe_img0')[0]);
 			$('#showMe_cadreImgExt').css('background-image','linear-gradient(0deg,'+showMe_backgroundColor+',rgb('+color+'))');
+			//$('#showMe_backGround').css('background-image','url("'+showMe_A[pElement]['href']+'")');
+			//$('#showMe_backGround').css('filter','blur(50px)');
 		}catch(err){
-			$('#showMe_cadreImgExt').css('background-image','none').css('background-color',showMe_backgroundColor);
+			$('#showMe_img0').load(function(){
+				var color=colorThief.getColor($('#showMe_img0')[0]);
+				$('#showMe_cadreImgExt').css('background-image','linear-gradient(0deg,'+showMe_backgroundColor+',rgb('+color+'))');
+			});
+			//$('#showMe_cadreImgExt').css('background-image','none').css('background-color',showMe_backgroundColor);
 		}
 	}else{
 		$('#showMe_cadreImgExt').css('background-image','none').css('background-color',showMe_backgroundColor);
