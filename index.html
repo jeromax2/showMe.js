@@ -4,8 +4,8 @@
 <style>
 *{font-family: arial; }
 body{text-align:center;padding-top:10px;background:linear-gradient(0deg,#aaaaff,#ffffff) fixed;}
-a.showMe{display:inline-block;}
-a.showMe img{width:150px;height:100px;margin-left:10px;border:1px transparent solid;transition:all 1s;border-radius:7px;}
+a.showMe{display:inline-block;margin-left:10px;}
+a.showMe img{width:150px;height:100px;border:1px transparent solid;transition:all 1s;border-radius:7px;}
 hr{visibility:hidden;}
 a.showMe img:hover{border:1px #fff solid;transition:all 0.2s;box-shadow:3px 3px 10px #888;}
 </style>
@@ -13,7 +13,7 @@ a.showMe img:hover{border:1px #fff solid;transition:all 0.2s;box-shadow:3px 3px 
 
 <!-- ####################### BEGINING OF SHOWME SAMPLE -->
 <script type="text/javascript" src="./jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="./jquery.mobile-1.4.5.min.js"></script>
+<!-- script type="text/javascript" src="./jquery.mobile-1.4.5.min.js"></script-->
 <script type="text/javascript" src="./showMe.js"></script>
 </head>
 <body>
@@ -44,13 +44,13 @@ a.showMe img:hover{border:1px #fff solid;transition:all 0.2s;box-shadow:3px 3px 
 <a class="showMe" href="showMe_html" data-showMeRel="idHtml1" title="Html content">
 	<img src="htmlContent.png">
 </a>
-<a class="showMe" href="https://en.wikipedia.org/wiki/Ecology" title="Web content">
+<a class="showMe" href="http://localhost/test/images/index.html" title="Web content">
 	<img src="WebPage.png">
 </a>
 
 <div style="display:none;width:500px;color:#33d;background-color:#fff;padding:5px;border-radius:7px;" id="idHtml1">
 		<div style="height:25px;line-height:25px;background: linear-gradient(#eee, #bbb);color:#aaa;border-top-left-radius:7px;border-top-right-radius:7px;text-shadow:1px 1px 0 #fff;font-weight:700;">Lorem Ipsum</div>
-		<p style="text-align:justify;padding:5px;border-left:2px solid;border-right:2px solid;border-image:linear-gradient(0deg,#fff,#bbb) 0% 10%;"><img src="pic-pexels-photo-132987.jpeg" style="margin:5px;width:150px;float:left;border-radius:7px;"> 
+		<p style="text-align:justify;padding:5px;border-left:2px solid;border-right:2px solid;border-image:linear-gradient(0deg,#fff,#bbb) 0% 10%;"><img src="vignette_pic-pexels-photo-132987.jpeg" style="margin:5px;width:150px;float:left;border-radius:7px;"> 
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 			Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
@@ -85,10 +85,24 @@ Download <a href="https://github.com/jeromax2/showMe.js">showMe.js</a> on Github
 	<li>Title of links is shown at the bottom of the screen when slideshow is on</li>
 	<li>For html content, "href"" must end with "showMe_html" and you have to add attribut called "data-showMeRel" which contains id of element which will be displayedn in the slideshow</li>
 	<li>Javascript parameters you can add in your web page :<ul>
-		<li><b>var showMe_backgroundColor='#222222';</b><br>
-			color of : gradient bottom of ambilight, background of picture with no ambilight,html content and movie background</li>
+		<li><b>var showMe_backgroundColor='rgba(30,30,30,1)';</b><br>
+			color of : gradient bottom of ambilight, background of picture with no ambilight,html content and movie background
+		</li>
 		<li><b>var showMe_ambilight=true;</b><br>
-			background color is tuned with main color of picture</li>
+			background color is tuned with main color of picture
+		</li>
+		<li><b>var showMe_backgroundColorGradient=true;</b><br>
+			Background color is graded from 'showMe_backgroundColor' to main color of picture if showMe_ambilight is true
+		</li>
+		<li><b>var showMe_effect='slide';</b><br>
+			Effect shown between 2 pictures change : 'slide', 'fade' or 'nothing'
+		</li>
+		<li><b>var showMe_speedEffect='200';</b><br>
+			Speed of effect in milliseconds
+		</li>
+		<li><b>var showMe_Opacity='1';</b><br>
+			Opacity of background. Let see or not the web page under
+		</li>
 	</ul></li>
 </ul>
 <ul><strong>Others informations</strong> :
