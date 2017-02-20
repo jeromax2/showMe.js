@@ -11,12 +11,12 @@ var showMe_prev=0;
 var showMe_next=0;
 var showMe_nbElement=0;
 var showMe_rotation=0;
-var showMe_speedEffect=200;
-var showMe_effect='slide';
 if(typeof showMe_backgroundColor==="undefined"){var showMe_backgroundColor='rgba(30,30,30,1)';}
 if(typeof showMe_backgroundColorGradient==="undefined"){var showMe_backgroundColorGradient=true;}
 if(typeof showMe_ambilight==="undefined"){var showMe_ambilight=true;}
-if(typeof showMe_effect==="undefined"){var showMe_effect='slide';}
+if(typeof showMe_effect==="undefined"){var showMe_effect='nothing';}
+if(typeof showMe_Opacity==="undefined"){var showMe_Opacity='1';}
+if(typeof showMe_speedEffect==="undefined"){var showMe_speedEffect='200';}
 var urlInitiale='';
 function showMe(pSelecteur){
 	var i=0;
@@ -88,7 +88,7 @@ function showMe_afficher(pNum){
 	if(!$('#showMe_FS').length>0){
 		var html='';
 		html+='<style>';
-		html+='#showMe_FS {perspective:1200px;z-index:1000;border:0;margin:0;left:0;top:0;top:0;width:100%;height:100%;position:fixed;background-color:#222;opacity:1;text-align:center;}';
+		html+='#showMe_FS {perspective:1200px;z-index:1000;border:0;margin:0;left:0;top:0;top:0;width:100%;height:100%;position:fixed;background-color:#222;opacity:'+showMe_Opacity+';text-align:center;}';
 		html+='#showMe_FS *{border:0;margin:0;font-family:\'Arial Black\',Gadget,sans-serif;}';
 		html+='#showMe_list{width:300%;height:100%;list-style-type:none;padding:0;margin:0;margin-left:-100%;}';
 		html+='#showMe_list li{float:left;position:relative;display:flex!important;align-items:center;padding:0;margin:0;text-align:center!important;vertical-align:middle;}';
@@ -197,6 +197,16 @@ function showMe_effetAfficher(pNum,pTypeEffect,pDirection){
 					setAmbilightElement(showMe_next,"#showMe_list li:last");
 					$(this).fadeIn(showMe_speedEffect);
 				});
+		}
+	}else if(pTypeEffect=='nothing'){
+		if(pDirection=='left'){//fleche gauche
+				$("#showMe_list").find("li:first").before($("#showMe_list").find("li:last"));
+				$("#showMe_list li:first").html(showMe_A[showMe_prev]['html']);
+				setAmbilightElement(showMe_prev,"#showMe_list li:first");
+		}else{//fleche droite
+				$("#showMe_list").find("li:last").after($("#showMe_list").find("li:first"));
+				$("#showMe_list li:last").html(showMe_A[showMe_next]['html']);
+				setAmbilightElement(showMe_next,"#showMe_list li:last");
 		}
 	}else if(pTypeEffect=='slide'){
 		if(pDirection=='left'){//fleche gauche
