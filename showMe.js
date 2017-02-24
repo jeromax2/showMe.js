@@ -1,6 +1,6 @@
 /*
  * ShowMe.js V1 jeromax@gmail.com
- *
+ * TODO : zoom image + arret/pause auto des vidéos
  * */
 
 /* Color Thief v2.0 by Lokesh Dhakar - http://www.lokeshdhakar.com */
@@ -13,8 +13,8 @@ var showMe_current=0;
 var showMe_nbElement=0;
 var showMe_rotation=0;
 if(typeof showMe_backgroundColor==="undefined"){var showMe_backgroundColor='rgba(30,30,30,1)';}
-if(typeof showMe_backgroundColorGradient==="undefined"){var showMe_backgroundColorGradient=true;}
-if(typeof showMe_ambilight==="undefined"){var showMe_ambilight=true;}
+if(typeof showMe_backgroundColorGradient==="undefined"){var showMe_backgroundColorGradient=false;}
+if(typeof showMe_ambilight==="undefined"){var showMe_ambilight=false;}
 if(typeof showMe_effect==="undefined"){var showMe_effect='slide';}
 if(typeof showMe_Opacity==="undefined"){var showMe_Opacity='1';}
 if(typeof showMe_speedEffect==="undefined"){var showMe_speedEffect='300';}//millisecondes
@@ -54,7 +54,7 @@ function showMe(pSelecteur){
 		i+=1;
 	})
 	showMe_nbElement=showMe_A.length;
-	$('body').append('<img src="" id="showMe_temp" style="display:none;">')
+	$('body').append('<div id="showMe_temp" style="display:none;"></div>')
 	$(pSelecteur).on("click", function (event){
 		event.preventDefault();
 		var num=$(event.target).attr('showMe_id');
@@ -71,7 +71,7 @@ function showMe(pSelecteur){
 			num=$(event.target).parent().attr('showMe_id');
 		};
 		if((showMe_A[num]['type']=='img')||(showMe_A[num]['type']=='pdf')||(showMe_A[num]['type']=='vid')||(showMe_A[num]['type']=='iframe')){
-			$('#showMe_temp').attr('src',showMe_A[num]['href']);
+			$('#showMe_temp').html(showMe_A[num]['html']);
 		}
 		return false;
 	});
@@ -80,10 +80,11 @@ function showMe(pSelecteur){
 		hash=parseInt(hash.substring(6));
 		if((hash<showMe_nbElement)&&(hash>=0)){
 			showMe_current=hash;
+			calculPrevNext();
 			showMe_afficher();//affichage en plein écran d'une photo particulière dès le démarrage
 		}
-	}else if(showMe_A.length>0){//on charge la première image
-		$('#showMe_temp').attr('data',showMe_A[0]['href']);
+	}else if(showMe_A.length>0){//on charge le premier élément
+		$('#showMe_temp').html(showMe_A[0]['html']);
 	}
 }
 var colorThief = new ColorThief();
@@ -123,50 +124,56 @@ function showMe_afficher(){
 		if(showMe_A.length>1){
 			html+='<div id="showMe_toLeft" class="showMe_navigation" style="left:0;">&lt;</div>';
 			html+='<div id="showMe_toRight" class="showMe_navigation" style="right:0;flex-direction:row-reverse;">&gt;</div>';
-			$(document).on("click",'#showMe_toLeft',function(event){showMe_current=showMe_prev;showMe_effetAfficher(showMe_effect,'left');});
-			$(document).on("click",'#showMe_toRight',function(event){showMe_current=showMe_next;showMe_effetAfficher(showMe_effect,'right');});
-			//$(document).on("swiperight",'body',function(event){showMe_effetAfficher(showMe_prev,'slide','left');});
-			//$(document).on("swipeleft",'body',function(event){showMe_effetAfficher(showMe_next,'slide','right');});
-			
 		}
 		html+='<div id="showMe_close" class="showMe_navigation" style="font-size:2em;right:0;top:0;height:50px;flex-direction:row-reverse;">X</div>';
-		$(document).on("click",'#showMe_close',function(event){$('#showMe_FS').remove();showMe_sortirFullScreen();window.location.href='#';});
-		$(document).on("keyup",'body',function(event){
-			if(showMe_A.length>1){
-				if(event.keyCode==37){showMe_current=showMe_prev;showMe_effetAfficher(showMe_effect,'left');}
-				if(event.keyCode==39){showMe_current=showMe_next;showMe_effetAfficher(showMe_effect,'right');}
-			}
-			if(event.keyCode==27){$('#showMe_FS').remove();showMe_sortirFullScreen();window.location.href='#';}
-			});
 		html+='</div>'
 		$('body').append(html);
 		showMe_width=window.innerWidth;
 		$('#showMe_FS,#showMe_FS li').css('width',showMe_width);
 		$('#showMe_FS,#showMe_FS li').css('height',window.innerHeight);
+		$(document).on("click",'#showMe_close',function(event){$('#showMe_FS').hide();showMe_sortirFullScreen();window.location.href='#';});
+		$(document).on("keyup",'body',function(event){
+			if(showMe_A.length>1){
+				if(event.keyCode==37){showMe_effetAfficher(showMe_effect,'left');}
+				if(event.keyCode==39){showMe_effetAfficher(showMe_effect,'right');}
+			}
+			if(event.keyCode==27){$('#showMe_FS').hide();showMe_sortirFullScreen();window.location.href='#';}
+		});
+		$(document).on("click",'#showMe_toLeft',function(event){showMe_effetAfficher(showMe_effect,'left');});
+		$(document).on("click",'#showMe_toRight',function(event){showMe_effetAfficher(showMe_effect,'right');});
 		showMe_entrerFullScreen();
 	}else{
+		$("#showMe_list li:nth-child(2)").html('');
 		$('#showMe_FS').show();
 	}
-	$("#showMe_1").html(showMe_A[showMe_current]['html']);
 	calculPrevNext();
-	$("#showMe_0").html(showMe_A[showMe_prev]['html']);
-	$("#showMe_2").html(showMe_A[showMe_next]['html']);
+	$("#showMe_list li:nth-child(2)").html(showMe_A[showMe_current]['html']);
+	$("#showMe_list li:first").html(showMe_A[showMe_prev]['html']);
 	showMe_effetAfficher('','');//aucun effet
-	setAmbilightElement(showMe_current,"#showMe_1");
-	setAmbilightElement(showMe_prev,"#showMe_0");
-	setAmbilightElement(showMe_next,"#showMe_2");
+	setAmbilightElement(showMe_current,"#showMe_list li:nth-child(2)");
+	setAmbilightElement(showMe_prev,"#showMe_list li:first");
 	if(showMe_effect=='cube'){
 		$('#showMe_3').css('transform','translateZ(-'+$('#showMe_list').width()+'px) rotateY(180deg)');
 		$('#showMe_list').css('transform-origin','center center -'+($('#showMe_list').width()/2)+'px');
+		$("#showMe_3").html(showMe_A[showMe_next]['html']);
+		setAmbilightElement(showMe_next,"#showMe_3");
+	}else{
+		$("#showMe_list li:last").html(showMe_A[showMe_next]['html']);
+		setAmbilightElement(showMe_next,"#showMe_list li:last");
 	}
-	addTouchScroll();			
+	addTouchScroll();		
 	return false;
 }
 function showMe_effetAfficher(pTypeEffect,pDirection){
+	if(pDirection=='left'){
+		showMe_current=showMe_prev;
+	}else if(pDirection=='right'){
+		showMe_current=showMe_next;
+	}
+	calculPrevNext();
 	window.location.href='#showMe'+showMe_current;
-	calculPrevNext(showMe_current);
-	$('#showMe_info').html(showMe_A[showMe_current]['title']+' <span style="font-size:0.5em;">'+(showMe_current+1)+'/'+showMe_nbElement+'</span>');
-
+	$('#showMe_info').html(showMe_A[showMe_current]['title']+' <span style="font-size:0.5em;">'+(showMe_current+1)+'/'+showMe_nbElement+'</span>');//+showMe_prev+'/'+showMe_current+'/'+showMe_next
+	var newElem=null;
 	if(pTypeEffect=='fade'){
 		if(pDirection=='left'){//fleche gauche
 			$("#showMe_list li:nth-child(2)").fadeOut(showMe_speedEffect,function(){
@@ -224,7 +231,17 @@ function showMe_effetAfficher(pTypeEffect,pDirection){
 			showMe_visibleFace++;
 			if(showMe_visibleFace>3){showMe_visibleFace=0;}
 		}
-	}	
+	}
+	if(pDirection=='left'){
+		actionOnElement(showMe_prev,'hide');
+	}else{
+		actionOnElement(showMe_next,'hide');
+	}
+}
+function actionOnElement(pElem,pAction){
+	if(showMe_A[pElem]['type']=='vid'){
+		
+	}
 }
 function calculPrevNext(){
 	if(showMe_current==0){
@@ -370,6 +387,7 @@ $(window).resize(function() {
 		$('.cube').css('transform-origin','center center -'+($('.cube').width()/2)+'px');
 	}
 });
+
 //window.addEventListener("error", function (e) {
    //alert("Error occured: " + e.error.message);//évite les problème lorsque l'image n'est pas chargée je pense
 //   return false;
