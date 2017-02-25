@@ -1,6 +1,6 @@
 /*
  * ShowMe.js V1 jeromax@gmail.com
- * TODO : zoom image + arret/pause auto des vidéos
+ * TODO : zoom image + voir pourquoi ça bug avec l'ambilight activé
  * */
 
 /* Color Thief v2.0 by Lokesh Dhakar - http://www.lokeshdhakar.com */
@@ -17,7 +17,7 @@ if(typeof showMe_backgroundColorGradient==="undefined"){var showMe_backgroundCol
 if(typeof showMe_ambilight==="undefined"){var showMe_ambilight=false;}
 if(typeof showMe_effect==="undefined"){var showMe_effect='slide';}
 if(typeof showMe_Opacity==="undefined"){var showMe_Opacity='1';}
-if(typeof showMe_speedEffect==="undefined"){var showMe_speedEffect='300';}//millisecondes
+if(typeof showMe_speedEffect==="undefined"){var showMe_speedEffect='200';}//millisecondes
 var showMe_visibleFace=1;
 var showMe_width;
 function showMe(pSelecteur){
@@ -31,25 +31,25 @@ function showMe(pSelecteur){
 		var href=$(this).attr('href').toLowerCase();
 		if(href.endsWith('.mp4')){
 			showMe_A[i]['type']='vid';
-			showMe_A[i]['html']='<video id="video" controls autoplay preload="metadata" poster="" src="'+showMe_A[i]['href']+'" style="">';
+			showMe_A[i]['html']='<video id="showMe_elem'+i+'" controls preload="metadata" poster="" src="'+showMe_A[i]['href']+'" style="">';
 			showMe_A[i]['html']+='Your browser don\'t know how to play this video (ouh le nul!)'
 			showMe_A[i]['html']+='</video>';
 		}else if(href.endsWith('showme_html')){
 			showMe_A[i]['type']='html';
-			showMe_A[i]['html']='<div class="showMe_html">';
+			showMe_A[i]['html']='<div id="showMe_elem'+i+'" class="showMe_html">';
 			showMe_A[i]['html']+=$('#'+$(this).attr('data-showMeRel'))[0].outerHTML;
 			showMe_A[i]['html']+='</div>';
 		}else if(href.endsWith('.pdf')){
 			showMe_A[i]['type']='pdf';
-			showMe_A[i]['html']='<object data="'+showMe_A[i]['href']+'" type="application/pdf" height="100%" width="100%">';
+			showMe_A[i]['html']='<object id="showMe_elem'+i+'" data="'+showMe_A[i]['href']+'" type="application/pdf" height="100%" width="100%">';
 			showMe_A[i]['html']+='<p>This browser does not support PDFs.</p>';
 			showMe_A[i]['html']+='</object>';
 		}else if((href.endsWith('.jpg'))||(href.endsWith('.jpeg'))||(href.endsWith('.gif'))||(href.endsWith('.png'))||(href.endsWith('.webp'))){// c'est une image
 			showMe_A[i]['type']='img';
-			showMe_A[i]['html']='<img src="'+showMe_A[i]['href']+'">';
+			showMe_A[i]['html']='<img id="showMe_elem'+i+'" src="'+showMe_A[i]['href']+'">';
 		}else{//open in iframe
 			showMe_A[i]['type']='iframe';
-			showMe_A[i]['html']='<iframe id="showMe_iframe" style="width:90%;height:90%;" src="'+showMe_A[i]['href']+'">Loading...</iframe>';
+			showMe_A[i]['html']='<iframe id="showMe_elem'+i+'" style="width:90%;height:90%;" src="'+showMe_A[i]['href']+'">Loading...</iframe>';
 		}
 		i+=1;
 	})
@@ -131,13 +131,13 @@ function showMe_afficher(){
 		showMe_width=window.innerWidth;
 		$('#showMe_FS,#showMe_FS li').css('width',showMe_width);
 		$('#showMe_FS,#showMe_FS li').css('height',window.innerHeight);
-		$(document).on("click",'#showMe_close',function(event){$('#showMe_FS').hide();showMe_sortirFullScreen();window.location.href='#';});
+		$(document).on("click",'#showMe_close',function(event){$('#showMe_FS').hide();actionOnElement(showMe_current,'disabled');showMe_sortirFullScreen();window.location.href='#';});
 		$(document).on("keyup",'body',function(event){
 			if(showMe_A.length>1){
 				if(event.keyCode==37){showMe_effetAfficher(showMe_effect,'left');}
 				if(event.keyCode==39){showMe_effetAfficher(showMe_effect,'right');}
 			}
-			if(event.keyCode==27){$('#showMe_FS').hide();showMe_sortirFullScreen();window.location.href='#';}
+			if(event.keyCode==27){$('#showMe_FS').hide();actionOnElement(showMe_current,'disabled');showMe_sortirFullScreen();window.location.href='#';}
 		});
 		$(document).on("click",'#showMe_toLeft',function(event){showMe_effetAfficher(showMe_effect,'left');});
 		$(document).on("click",'#showMe_toRight',function(event){showMe_effetAfficher(showMe_effect,'right');});
@@ -146,10 +146,12 @@ function showMe_afficher(){
 		$("#showMe_list li:nth-child(2)").html('');
 		$('#showMe_FS').show();
 	}
+	$('#showMe_temp').html('');//pour éviter l'impossibilité de l'arrêt de la vidéo lorsqu'on quitte le plein écran
 	calculPrevNext();
 	$("#showMe_list li:nth-child(2)").html(showMe_A[showMe_current]['html']);
 	$("#showMe_list li:first").html(showMe_A[showMe_prev]['html']);
 	showMe_effetAfficher('','');//aucun effet
+	actionOnElement(showMe_current,'enabled');
 	setAmbilightElement(showMe_current,"#showMe_list li:nth-child(2)");
 	setAmbilightElement(showMe_prev,"#showMe_list li:first");
 	if(showMe_effect=='cube'){
@@ -161,6 +163,7 @@ function showMe_afficher(){
 		$("#showMe_list li:last").html(showMe_A[showMe_next]['html']);
 		setAmbilightElement(showMe_next,"#showMe_list li:last");
 	}
+	
 	addTouchScroll();		
 	return false;
 }
@@ -206,12 +209,16 @@ function showMe_effetAfficher(pTypeEffect,pDirection){
 				$(this).css({marginLeft:"-100%"}).find("li:first").before($(this).find("li:last"));
 				$("#showMe_list li:first").html(showMe_A[showMe_prev]['html']);
 				setAmbilightElement(showMe_prev,"#showMe_list li:first");
+				actionOnElement(showMe_current,'enabled');
+				actionOnElement(showMe_next,'disabled');
 			});
 		}else{//fleche droite
 			$("#showMe_list").animate({marginLeft:"-200%"},showMe_speedEffect,'linear',function(){
 				$(this).css({marginLeft:"-100%"}).find("li:last").after($(this).find("li:first"));
 				$("#showMe_list li:last").html(showMe_A[showMe_next]['html']);
 				setAmbilightElement(showMe_next,"#showMe_list li:last");
+				actionOnElement(showMe_current,'enabled');
+				actionOnElement(showMe_prev,'disabled');
 			});
 		}
 	}else if(pTypeEffect=='cube'){
@@ -232,15 +239,16 @@ function showMe_effetAfficher(pTypeEffect,pDirection){
 			if(showMe_visibleFace>3){showMe_visibleFace=0;}
 		}
 	}
-	if(pDirection=='left'){
-		actionOnElement(showMe_prev,'hide');
-	}else{
-		actionOnElement(showMe_next,'hide');
-	}
+
 }
 function actionOnElement(pElem,pAction){
 	if(showMe_A[pElem]['type']=='vid'){
-		
+		if(pAction=='enabled'){
+			$("#showMe_elem"+pElem).get(0).currentTime = 0;
+			$("#showMe_elem"+pElem).get(0).play();
+		}else{
+			$("#showMe_elem"+pElem).get(0).pause();
+		}
 	}
 }
 function calculPrevNext(){
