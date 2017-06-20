@@ -12,15 +12,18 @@ var showMe_next=0;
 var showMe_current=0;
 var showMe_nbElement=0;
 var showMe_rotation=0;
+var showMe_log=false;
 if(typeof showMe_backgroundColor==="undefined"){var showMe_backgroundColor='rgba(30,30,30,1)';}
 if(typeof showMe_backgroundColorGradient==="undefined"){var showMe_backgroundColorGradient=false;}
 if(typeof showMe_ambilight==="undefined"){var showMe_ambilight=false;}
 if(typeof showMe_effect==="undefined"){var showMe_effect='slide';}
-if(typeof showMe_Opacity==="undefined"){var showMe_Opacity='1';}
+if(typeof showMe_opacity==="undefined"){var showMe_opacity='1';}
 if(typeof showMe_speedEffect==="undefined"){var showMe_speedEffect='200';}//millisecondes
 var showMe_visibleFace=1;
 var showMe_width;
+var showMe_logTexte='';
 function showMe(pSelecteur){
+	ecrireLog('Initialisation...');
 	var i=0;
 	$(pSelecteur).each(function(){
 		$(this).attr('showMe_id',i);
@@ -28,6 +31,7 @@ function showMe(pSelecteur){
 		showMe_A[i]['title']=(($(this).attr('title')!=undefined) ? $(this).attr('title') : '');
 		showMe_A[i]['href']=$(this).attr('href');
 		showMe_A[i]['bg']='';
+		if(!showMe_ambilight){showMe_A[i]['bg']=showMe_backgroundColor;}
 		var href=$(this).attr('href').toLowerCase();
 		if(href.endsWith('.mp4')){
 			showMe_A[i]['type']='vid';
@@ -54,6 +58,8 @@ function showMe(pSelecteur){
 		i+=1;
 	})
 	showMe_nbElement=showMe_A.length;
+	ecrireLog(showMe_nbElement+' élément trouvés');
+
 	$('body').append('<div id="showMe_temp" style="display:none;"></div>')
 	$(pSelecteur).on("click", function (event){
 		event.preventDefault();
@@ -81,18 +87,21 @@ function showMe(pSelecteur){
 		if((hash<showMe_nbElement)&&(hash>=0)){
 			showMe_current=hash;
 			calculPrevNext();
+			ecrireLog('Affichage en plein écran...');
 			showMe_afficher();//affichage en plein écran d'une photo particulière dès le démarrage
 		}
 	}else if(showMe_A.length>0){//on charge le premier élément
+		ecrireLog('Chargement du 1er élément potentiel...');
 		$('#showMe_temp').html(showMe_A[0]['html']);
 	}
 }
 var colorThief = new ColorThief();
 function showMe_afficher(){
-	if(!$('#showMe_FS').length>0){
+	if(!$('#showMe_FS').length>0){//première fois que la fonctionnalité est appelée
+		ecrireLog('Création de l\'affichage...');
 		var html='';
 		html+='<style>';
-		html+='#showMe_FS {perspective:1200px;z-index:1000;border:0;margin:0;left:0;top:0;top:0;width:100%;height:100%;position:fixed;background-color:#222;opacity:'+showMe_Opacity+';text-align:center;}';
+		html+='#showMe_FS {perspective:1200px;z-index:1000;border:0;margin:0;left:0;top:0;top:0;width:100%;height:100%;position:fixed;background-color:#222;opacity:'+showMe_opacity+';text-align:center;}';
 		html+='#showMe_FS *{border:0;margin:0;font-family:\'Arial Black\',Gadget,sans-serif;}';
 		html+='#showMe_list{width:300%;height:100%;list-style-type:none;padding:0;margin:0;margin-left:-100%;}';
 		html+='#showMe_list li{float:left;position:relative;display:flex!important;align-items:center;padding:0;margin:0;text-align:center!important;vertical-align:middle;}';
@@ -142,6 +151,7 @@ function showMe_afficher(){
 		$(document).on("click",'#showMe_toLeft',function(event){showMe_effetAfficher(showMe_effect,'left');});
 		$(document).on("click",'#showMe_toRight',function(event){showMe_effetAfficher(showMe_effect,'right');});
 		showMe_entrerFullScreen();
+		addTouchScroll();		
 	}else{
 		$("#showMe_list li:nth-child(2)").html('');
 		$('#showMe_FS').show();
@@ -164,7 +174,6 @@ function showMe_afficher(){
 		setAmbilightElement(showMe_next,"#showMe_list li:last");
 	}
 	
-	addTouchScroll();		
 	return false;
 }
 function showMe_effetAfficher(pTypeEffect,pDirection){
@@ -173,6 +182,7 @@ function showMe_effetAfficher(pTypeEffect,pDirection){
 	}else if(pDirection=='right'){
 		showMe_current=showMe_next;
 	}
+	ecrireLog('Affichage de l\'élément '+showMe_A[showMe_current]['title']+'...');
 	calculPrevNext();
 	window.location.href='#showMe'+showMe_current;
 	$('#showMe_info').html(showMe_A[showMe_current]['title']+' <span style="font-size:0.5em;">'+(showMe_current+1)+'/'+showMe_nbElement+'</span>');//+showMe_prev+'/'+showMe_current+'/'+showMe_next
@@ -243,11 +253,13 @@ function showMe_effetAfficher(pTypeEffect,pDirection){
 }
 function actionOnElement(pElem,pAction){
 	if(showMe_A[pElem]['type']=='vid'){
-		if(pAction=='enabled'){
-			$("#showMe_elem"+pElem).get(0).currentTime = 0;
-			$("#showMe_elem"+pElem).get(0).play();
-		}else{
-			$("#showMe_elem"+pElem).get(0).pause();
+		if($("#showMe_elem"+pElem).get(0)!=undefined){
+			if(pAction=='enabled'){
+				$("#showMe_elem"+pElem).get(0).currentTime = 0;
+				$("#showMe_elem"+pElem).get(0).play();
+			}else{
+				$("#showMe_elem"+pElem).get(0).pause();
+			}
 		}
 	}
 }
@@ -265,6 +277,13 @@ function calculPrevNext(){
 	if(showMe_prev<0){showMe_prev=0;}// cas où il y a moins de 3 images
 	if(showMe_next>=showMe_A.length){showMe_next=showMe_A.length-1;}// cas où il y a moins de 3 images
 }
+function ecrireLog(pTexte){
+	if(showMe_log){
+		showMe_logTexte=pTexte+'<br>'+showMe_logTexte;
+		$('#showMe_log').html(showMe_logTexte);
+	}
+}
+
 function getOppositeFace(){
 	if(showMe_visibleFace==0){return 2;}
 	else if(showMe_visibleFace==1){return 3;}
@@ -275,21 +294,25 @@ function setAmbilightElement(pNum,pElement){
 	if(showMe_A[pNum]['bg']!=''){
 		$(pElement).css('background',showMe_A[pNum]['bg']);
 	}else{
+		ecrireLog('<b>Ajout Ambilight sur '+showMe_A[pNum]['title']+'...</b>');
+		var bg=showMe_backgroundColor;
 		if(showMe_ambilight&&(showMe_A[pNum]['type']=='img')){
 			try{
-				setCSSBackground(pElement);
+				bg=setCSSBackground(pElement);
+				$(pElement).css('background',bg);
+				showMe_A[pNum]['bg']=bg;
 			}catch(err){
-				$(pElement+" img").load(function(){
-					setCSSBackground(pElement);
-				});
+				$(pElement).css('background',bg);
+				//$(pElement+" img").load(function(){bg=setCSSBackground(pElement);});
 			}
 		}else{
 			$(pElement).css('background',showMe_backgroundColor);
+			showMe_A[pNum]['bg']=showMe_backgroundColor;
 		}
-		showMe_A[pNum]['bg']=$(pElement).css('background');
 	}
 }
 function setCSSBackground(pElement){
+	//ecrireLog('Ajout Ambilight sur '+pElement+'...');
 	var color=colorThief.getColor($(pElement+" img")[0]);
 	if(showMe_backgroundColorGradient){
 		var bg='linear-gradient(0deg,'+showMe_backgroundColor+',rgba('+color+',1))'
@@ -297,9 +320,11 @@ function setCSSBackground(pElement){
 		var bg='rgba('+color+',1)'
 	}
 	$(pElement).css('background',bg);
+	return bg;
 }
 // https://css-tricks.com/the-javascript-behind-touch-friendly-sliders/
 function addTouchScroll(){
+	ecrireLog('Ajout du touchScroll...');
 	if (navigator.msMaxTouchPoints) {//IE
 		$('#showMe_list').addClass('ms-touch');
 		$('#showMe_list').on('scroll', function() {
@@ -384,6 +409,9 @@ function showMe_entrerFullScreen(){if(jQuery.browser.mobile){if(!document.fullsc
 function showMe_sortirFullScreen(){if(document.cancelFullScreen){document.cancelFullScreen();}else if(document.mozCancelFullScreen){document.mozCancelFullScreen();}else if(document.webkitCancelFullScreen){document.webkitCancelFullScreen();}}
 
 $(document).ready(function(){
+	if(showMe_log){
+		$('body').append('<div id="showMe_log" style="position:fixed;top:0;right:0;z-index:1001;width:400px;color:#fff;text-align:left;padding:5px;border:2px #f00 solid;border-radius:5px;margin:5px;background-color:rgba(0,0,0,0.1);"></div>')
+	}
 	showMe('.showMe');
 });
 $(window).resize(function() {

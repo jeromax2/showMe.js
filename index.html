@@ -13,13 +13,16 @@ a.showMe img:hover{border:1px #fff solid;transition:all 0.2s;box-shadow:3px 3px 
 
 <!-- ####################### BEGINING OF SHOWME SAMPLE -->
 <script type="text/javascript" src="./jquery-3.1.1.min.js"></script>
-<!-- script type="text/javascript" src="./jquery.mobile-1.4.5.min.js"></script-->
 <script type="text/javascript" src="./showMe.js"></script>
 </head>
 <body>
 <script>
-//var showMe_backgroundColor='#ff0000';//you can tune this if you want
-//var showMe_ambilight=false;//you can tune this too
+var showMe_backgroundColor='rgba(30,30,30,1)';
+var showMe_backgroundColorGradient=true;
+var showMe_ambilight=true;
+var showMe_effect='slide';
+var showMe_opacity='1';
+var showMe_speedEffect='200';//millisecondes
 </script>
 <h1>Click on thumbnails below to see showMe in action !</h1>
 <a class="showMe" href="pic-pexels-photo-132987.jpeg" title="jpeg file" target="_blank">
@@ -60,8 +63,13 @@ a.showMe img:hover{border:1px #fff solid;transition:all 0.2s;box-shadow:3px 3px 
 <!-- ####################### END OF SHOWME SAMPLE-->
 
 <!-- https://en.wikipedia.org/wiki/Ecology -->
-
 <div style="position:fixed;z-index:-1;top:150px;font-weight:700;font-size:100px;transform:rotate(-45deg);color:rgba(255,255,255,0.4);text-shadow:1px 1px 1px rgba(150,150,150,0.4);">ShowME.js</div>
+<select onchange="showMe_effect=this.value;">
+	<option value="slide" selected>Slide</option>
+	<option value="nothing">Nothing</option>
+	<option value="fade">Fade</option>
+	<!-- option value="cube">Cube</option-->
+</select>
 <p>Keyboard, mouse and touch events</p>
 <p>Very light and simple to use.</p>
 <p><i>Show source of this page to see how it simply works</i></p>
