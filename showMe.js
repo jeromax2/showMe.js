@@ -331,7 +331,7 @@ function setAmbilightElement2(pNum,pElement){
 				backgroundAttachment:'fixed',
 				backgroundPosition:'center center',
 				backgroundSize:'cover',
-				filter:'blur(200px)'
+				filter:'blur(150px)'
 				};
 		$(pElement+'>div').css(styles);
 	}
