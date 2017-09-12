@@ -330,7 +330,6 @@ function setAmbilightElement2(pNum,pElement){
 	if(showMe_A[pNum]['bg']!=''){
 		$(pElement).css('background',showMe_A[pNum]['bg']);
 	}else{
-		ecrireLog('<b>Ajout Ambilight sur '+showMe_A[pNum]['title']+'...1</b>');
 		var bg=showMe_backgroundColor;
 		if(showMe_ambilight&&(showMe_A[pNum]['type']=='img')){
 			try{
@@ -338,7 +337,6 @@ function setAmbilightElement2(pNum,pElement){
 			}catch(err){
 				ecrireLog('<b>Ajout Ambilight sur '+showMe_A[pNum]['title']+'...'+bg+'</b>');
 				$(pElement).css('background',bg);
-				//$(pElement+" img").load(function(){bg=setCSSBackground(pElement);});// ne fonctionne pas si c'est le href qui est remplacé
 			}
 		}else{
 			$(pElement).css('background',showMe_backgroundColor);
