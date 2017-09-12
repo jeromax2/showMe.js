@@ -110,7 +110,6 @@ function showMe_afficher(){
 		html+='#showMe_list li{float:left;position:relative;display:flex!important;align-items:center;padding:0;margin:0;text-align:center!important;vertical-align:middle;}';
 		html+='#showMe_list li>*{border-radius:7px;margin-left:auto;margin-right:auto;max-width:98%;max-height:98%;box-shadow:4px 4px 20px #000;vertical-align:middle;}';
 		html+='#showMe_info{position:fixed;bottom:5px;background-color:transparent;color:#fff;z-index:10001;width:100%;text-shadow:0 1px 2px #000;font-size:1.5em;}';
-		html+='.showMe_bgImg{}';
 
 		html+='.showMe_navigation{position:absolute;display:flex;align-items:center;top:0;width:30px;height:100%;z-index:1000;padding:20px;text-shadow:0 0 1px #000000;transition:0.2s all;color:#fff;font-size:3em;cursor:pointer;text-shadow:0 0 2px #000;opacity:0.1;}';
 		html+='.showMe_navigation:hover{opacity:1;transition:0.1s all;}';
@@ -303,7 +302,31 @@ function setAmbilightElement(pNum,pElement){
 		setAmbilightElement2(pNum,pElement);
 	}
 }
+/*
+ * Dégradé en fonction des couleurs de l'image
+ * */
 function setAmbilightElement1(pNum,pElement){
+	if(showMe_A[pNum]['bg']!=''){
+		$(pElement).css('background',showMe_A[pNum]['bg']);
+	}else{
+		var bg=showMe_backgroundColor;
+		if(showMe_ambilight&&(showMe_A[pNum]['type']=='img')){
+			try{
+				setTimeout(function(){setCSSBackground(pNum,pElement);},1000);
+			}catch(err){
+				ecrireLog('<b>Ajout Ambilight sur '+showMe_A[pNum]['title']+'...'+bg+'</b>');
+				$(pElement).css('background',bg);
+			}
+		}else{
+			$(pElement).css('background',showMe_backgroundColor);
+			showMe_A[pNum]['bg']=showMe_backgroundColor;
+		}
+	}
+}
+/*
+ * L'image est reprise puis on y applique du flou
+ * */
+function setAmbilightElement2(pNum,pElement){
 	if(!$(pElement+'>div').length){
 		$(pElement).prepend('<div></div>');
 		var styles={
@@ -326,26 +349,7 @@ function setAmbilightElement1(pNum,pElement){
 	$(pElement+'>div').css(styles);
 	
 }
-function setAmbilightElement2(pNum,pElement){
-	if(showMe_A[pNum]['bg']!=''){
-		$(pElement).css('background',showMe_A[pNum]['bg']);
-	}else{
-		var bg=showMe_backgroundColor;
-		if(showMe_ambilight&&(showMe_A[pNum]['type']=='img')){
-			try{
-				setTimeout(function(){setCSSBackground(pNum,pElement);},1000);
-			}catch(err){
-				ecrireLog('<b>Ajout Ambilight sur '+showMe_A[pNum]['title']+'...'+bg+'</b>');
-				$(pElement).css('background',bg);
-			}
-		}else{
-			$(pElement).css('background',showMe_backgroundColor);
-			showMe_A[pNum]['bg']=showMe_backgroundColor;
-		}
-	}
-}
 function setCSSBackground(pNum,pElement){
-	//ecrireLog('Ajout Ambilight sur '+pElement+'...');
 	var color=colorThief.getColor($(pElement+" img")[0]);
 	if(showMe_backgroundColorGradient){
 		var bg='linear-gradient(0deg,'+showMe_backgroundColor+',rgba('+color+',1))'
