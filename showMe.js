@@ -309,14 +309,8 @@ function setAmbilightElement1(pNum,pElement){
 	if(showMe_A[pNum]['bg']!=''){
 		$(pElement).css('background',showMe_A[pNum]['bg']);
 	}else{
-		var bg=showMe_backgroundColor;
 		if(showMe_ambilight&&(showMe_A[pNum]['type']=='img')){
-			try{
-				setTimeout(function(){setCSSBackground(pNum,pElement);},1000);
-			}catch(err){
-				ecrireLog('<b>Ajout Ambilight sur '+showMe_A[pNum]['title']+'...'+bg+'</b>');
-				$(pElement).css('background',bg);
-			}
+			setTimeout(function(){setCSSBackground(pNum,pElement);},1000);
 		}else{
 			$(pElement).css('background',showMe_backgroundColor);
 			showMe_A[pNum]['bg']=showMe_backgroundColor;
@@ -350,15 +344,18 @@ function setAmbilightElement2(pNum,pElement){
 	
 }
 function setCSSBackground(pNum,pElement){
-	var color=colorThief.getColor($(pElement+" img")[0]);
-	if(showMe_backgroundColorGradient){
-		var bg='linear-gradient(0deg,'+showMe_backgroundColor+',rgba('+color+',1))'
-	}else{
-		var bg='rgba('+color+',1)'
+	var bg=showMe_backgroundColor;
+	try{
+		var color=colorThief.getColor($(pElement+" img")[0]);
+		if(showMe_backgroundColorGradient){
+			var bg='linear-gradient(0deg,'+showMe_backgroundColor+',rgba('+color+',1))'
+		}else{
+			var bg='rgba('+color+',1)'
+		}
+	}catch(err){
 	}
 	$(pElement).css('background',bg);
 	showMe_A[pNum]['bg']=bg;
-	return bg;
 }
 // https://css-tricks.com/the-javascript-behind-touch-friendly-sliders/
 // https://github.com/mdn/dom-examples/blob/master/pointerevents/Pinch_zoom_gestures.html
