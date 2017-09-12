@@ -15,10 +15,10 @@ var showMe_next=0;
 var showMe_current=0;
 var showMe_nbElement=0;
 var showMe_rotation=0;
+var showMe_msBeforeDetection=500;
 if(typeof showMe_backgroundColor==="undefined"){var showMe_backgroundColor='rgba(30,30,30,1)';}
 if(typeof showMe_backgroundColorGradient==="undefined"){var showMe_backgroundColorGradient=false;}
-if(typeof showMe_ambilight==="undefined"){var showMe_ambilight=false;}
-if(typeof showMe_typeAmbilight==="undefined"){var showMe_typeAmbilight=1;}
+if(typeof showMe_ambilight==="undefined"){var showMe_ambilight=1;}
 if(typeof showMe_effect==="undefined"){var showMe_effect='slide';}
 if(typeof showMe_opacity==="undefined"){var showMe_opacity='1';}
 if(typeof showMe_speedEffect==="undefined"){var showMe_speedEffect='200';}//millisecondes
@@ -34,7 +34,6 @@ function showMe(pSelecteur){
 		showMe_A[i]['title']=(($(this).attr('title')!=undefined) ? $(this).attr('title') : '');
 		showMe_A[i]['href']=$(this).attr('href');
 		showMe_A[i]['bg']='';
-		if(!showMe_ambilight){showMe_A[i]['bg']=showMe_backgroundColor;}
 		var href=$(this).attr('href').toLowerCase();
 		if(href.endsWith('.mp4')){
 			showMe_A[i]['type']='vid';
@@ -252,7 +251,6 @@ function showMe_effetAfficher(pTypeEffect,pDirection){
 			if(showMe_visibleFace>3){showMe_visibleFace=0;}
 		}
 	}
-
 }
 function actionOnElement(pElem,pAction){
 	if(showMe_A[pElem]['type']=='vid'){
@@ -293,24 +291,29 @@ function getOppositeFace(){
 	else if(showMe_visibleFace==2){return 0;}
 	else if(showMe_visibleFace==3){return 1;}
 }
-
 function setAmbilightElement(pNum,pElement){
-	ecrireLog('<b>Ajout Ambilight sur '+showMe_A[pNum]['title']+'...1</b>');
-	if(showMe_typeAmbilight==1){
+	if(showMe_ambilight==1){
 		setAmbilightElement1(pNum,pElement);
-	}else if(showMe_typeAmbilight==2){
+	}else if(showMe_ambilight==2){//picture
 		setAmbilightElement2(pNum,pElement);
+	}else{
+		$(pElement).css('background',showMe_backgroundColor);
+		ecrireLog('<b>Pas d\'Ambilight sur '+showMe_A[pNum]['title']+'...1</b>');
 	}
 }
 /*
  * Dégradé en fonction des couleurs de l'image
  * */
 function setAmbilightElement1(pNum,pElement){
+	if($(pElement+'>div').length){
+		$(pElement+'>div').remove();
+	}
 	if(showMe_A[pNum]['bg']!=''){
 		$(pElement).css('background',showMe_A[pNum]['bg']);
 	}else{
-		if(showMe_ambilight&&(showMe_A[pNum]['type']=='img')){
-			setTimeout(function(){setCSSBackground(pNum,pElement);},1000);
+		ecrireLog('<b>Ajout Ambilight(ambiant) sur '+showMe_A[pNum]['title']+'...1</b>');
+		if(showMe_A[pNum]['type']=='img'){
+			setTimeout(function(){setCSSBackground(pNum,pElement);},showMe_msBeforeDetection);
 		}else{
 			$(pElement).css('background',showMe_backgroundColor);
 			showMe_A[pNum]['bg']=showMe_backgroundColor;
@@ -321,6 +324,7 @@ function setAmbilightElement1(pNum,pElement){
  * L'image est reprise puis on y applique du flou
  * */
 function setAmbilightElement2(pNum,pElement){
+	ecrireLog('<b>Ajout Ambilight (picture) sur '+showMe_A[pNum]['title']+'...1</b>');
 	if(!$(pElement+'>div').length){
 		$(pElement).prepend('<div></div>');
 		var styles={
@@ -340,6 +344,7 @@ function setAmbilightElement2(pNum,pElement){
 	}else{
 		var styles={backgroundColor:showMe_backgroundColor,backgroundImage:'none'};
 	}
+	$(pElement).css('background','none');
 	$(pElement+'>div').css(styles);
 	
 }
