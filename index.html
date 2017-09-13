@@ -13,7 +13,7 @@ a.showMe img:hover{border:1px #fff solid;transition:all 0.2s;box-shadow:3px 3px 
 
 <!-- ####################### BEGINING OF SHOWME SAMPLE -->
 <script type="text/javascript" src="./jquery-3.1.1.min.js"></script>
-<script type="text/javascript" src="./showMe.js?<?php echo time()?>"></script>
+<script type="text/javascript" src="./showMe.js?1505308936"></script>
 </head>
 <body>
 <script>
@@ -65,25 +65,35 @@ var showMe_log=false;
 
 <div style="position:fixed;z-index:-1;top:150px;font-weight:700;font-size:100px;transform:rotate(-45deg);color:rgba(255,255,255,0.4);text-shadow:1px 1px 1px rgba(150,150,150,0.4);">ShowME.js</div>
 <br>
-<fieldset style="width:350px;position:fixed;top:150px;">
-Change value if you want then click on thumbnail : <br>
-Animation : <select onchange="showMe_effect=this.value;">
-	<option value="slide" selected>Slide</option>
+<fieldset style="width:360px;border-radius:7px;position:fixed;top:150px;background-color:rgba(255,255,255,0.3);">
+<i>Change value if you want then click on thumbnail :</i>
+<table>
+<tr>
+	<td>Animation : </td>
+	<td><select onchange="showMe_effect=this.value;" autocomplete="off">
 	<option value="nothing">Nothing</option>
+	<option value="slide" selected>Slide</option>
 	<option value="fade">Fade</option>
 	<!-- option value="cube">Cube</option-->
-</select><br>
-AmbiLight : <select onchange="showMe_ambilight=this.value">
-	<option value="0" selected>None</option>
-	<option value="1" selected>Ambiant</option>
-	<option value="2">Picture</option>
-</select><br>
-Background-color : <input type="color" onchange="showMe_backgroundColor=this.value" value="#1e1e1e">
+	</select></td>
+</tr>
+<tr>
+	<td>AmbiLight : </td><td><select onchange="showMe_ambilight=this.value" autocomplete="off">
+		<option value="0">None</option>
+		<option value="1" selected>Ambiant</option>
+		<option value="2">Nebula atmosphere</option>
+	</select></td>
+</tr>
+<tr>
+	<td>Background-color : </td>
+	<td><input type="color" onchange="showMe_backgroundColor=this.value" value="#1e1e1e" autocomplete="off"></td>
+</tr>
+</table>
 </fieldset>
 <p>Keyboard, mouse and touch events</p>
 <p>Very light and simple to use.</p>
 <p><i>Show source of this page to see how it simply works</i></p>
-Download the latest <a href="https://github.com/jeromax2/showMe.js">showMe.js</a> on Github
+Download the latest <a href="https://github.com/jeromax2/showMe.js" target="_blank">showMe.js</a> on Github
 <div style="width:650px;margin-left:auto;margin-right:auto;text-align:justify;">
 <ul><strong>ShowMe open</strong> :
 	<li>jpg, jpeg, gif, png and webp (if browser accepts it)</li>
@@ -96,19 +106,19 @@ Download the latest <a href="https://github.com/jeromax2/showMe.js">showMe.js</a
 	<li><a href="https://jquery.com">jquery</a> v3.1.1 </li>
 </ul>
 <ul><strong>How to install showMe</strong> :
-	<li>Insert link to jquery and <a href="https://github.com/jeromax2/showMe.js" target="_blank">ShowMe</a> librairies in the head of your web page</li>
+	<li>Insert link to jquery and <a href="https://github.com/jeromax2/showMe.js">ShowMe</a> librairies in the head of your web page</li>
 	<li>Assign the class "showMe" at element you want it be open as slideshow</li>
-	<li>showMe grab the "href" of these elements, analyse them and open its in slide show</li>
+	<li>showMe grabs the "href" of these elements, analyse them and opens its in slide show</li>
 	<li>Title of links is shown at the bottom of the screen when slideshow is on</li>
 	<li>For html content, "href"" must end with "showMe_html" and you have to add attribut called "data-showMeRel" which contains id of element which will be displayedn in the slideshow</li>
 	<li>Javascript parameters you can add in your web page :<ul>
-		<li><b>var showMe_backgroundColor='rgba(30,30,30,1)';</b><br>
+		<li><b>var showMe_backgroundColor='#1e1e1e';</b><br>
 			color of : gradient bottom of ambilight, background of picture with no ambilight,html content and movie background
 		</li>
 		<li><b>var showMe_ambilight=1;</b><br>
-			0 : No ambilight, background color is equal to showMe_backgroundColor
+			0 : No ambilight, background color is equal to showMe_backgroundColor<br>
 			1 : background color is tuned with main color of picture<br>
-			2 : the same picture whith blur effect is used to fill the background (slow)
+			2 : A nebula atmosphere based on picture is used to fill the background (beautifull but transition will probably be slower)
 		</li>
 		<li><b>var showMe_backgroundColorGradient=true;</b><br>
 			Background color is graded from 'showMe_backgroundColor' to main color of picture if showMe_ambilight is true

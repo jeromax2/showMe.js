@@ -108,9 +108,9 @@ function showMe_afficher(){
 		html+='#showMe_list{width:300%;height:100%;list-style-type:none;padding:0;margin:0;margin-left:-100%;}';
 		html+='#showMe_list li{float:left;position:relative;display:flex!important;align-items:center;padding:0;margin:0;text-align:center!important;vertical-align:middle;}';
 		html+='#showMe_list li>*{border-radius:7px;margin-left:auto;margin-right:auto;max-width:98%;max-height:98%;box-shadow:4px 4px 20px #000;vertical-align:middle;}';
-		html+='#showMe_info{position:fixed;bottom:5px;background-color:transparent;color:#fff;z-index:10001;width:100%;text-shadow:0 1px 2px #000;font-size:1.5em;}';
+		html+='#showMe_info{position:fixed;bottom:5px;background-color:transparent;color:#fff;z-index:10001;width:100%;text-shadow:0 1px 2px #000;font-size:2em;}';
 
-		html+='.showMe_navigation{position:absolute;display:flex;align-items:center;top:0;width:30px;height:100%;z-index:1000;padding:20px;text-shadow:0 0 1px #000000;transition:0.2s all;color:#fff;font-size:3em;cursor:pointer;text-shadow:0 0 2px #000;opacity:0.1;}';
+		html+='.showMe_navigation{position:absolute;display:flex;align-items:center;top:0;width:30px;height:100%;z-index:1000;padding:20px;transition:0.2s all;color:#fff;font-size:3em;cursor:pointer;text-shadow:0 0 5px #000;opacity:0.2;}';
 		html+='.showMe_navigation:hover{opacity:1;transition:0.1s all;}';
 		html+='.showMe_html>*{display:block!important;}';
 		html+='.ms-touch.slider{overflow-x:scroll;overflow-y:hidden;-ms-overflow-style:none;-ms-scroll-chaining: none;-ms-scroll-snap-type: mandatory;-ms-scroll-snap-points-x: snapInterval(0%, 100%);}';
@@ -305,8 +305,8 @@ function setAmbilightElement(pNum,pElement){
  * Dégradé en fonction des couleurs de l'image
  * */
 function setAmbilightElement1(pNum,pElement){
-	if($(pElement+'>div').length){
-		$(pElement+'>div').remove();
+	if($(pElement+' div:first-child').length){
+		//$(pElement+' div:first-child').remove();
 	}
 	if(showMe_A[pNum]['bg']!=''){
 		$(pElement).css('background',showMe_A[pNum]['bg']);
@@ -332,9 +332,9 @@ function setAmbilightElement2(pNum,pElement){
 				height:'100%',
 				zIndex:'-1',
 				position:'fixed',
+				backgroundSize:'cover',
 				backgroundAttachment:'fixed',
 				backgroundPosition:'center center',
-				backgroundSize:'cover',
 				filter:'blur(150px)'
 				};
 		$(pElement+'>div').css(styles);
@@ -344,9 +344,8 @@ function setAmbilightElement2(pNum,pElement){
 	}else{
 		var styles={backgroundColor:showMe_backgroundColor,backgroundImage:'none'};
 	}
-	$(pElement).css('background','none');
 	$(pElement+'>div').css(styles);
-	
+	$(pElement).css('background','none');
 }
 function setCSSBackground(pNum,pElement){
 	var bg=showMe_backgroundColor;
