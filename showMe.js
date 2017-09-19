@@ -17,7 +17,7 @@ var showMe_nbElement=0;
 var showMe_rotation=0;
 var showMe_msBeforeDetection=500;
 if(typeof showMe_backgroundColor==="undefined"){var showMe_backgroundColor='#1e1e1e';}
-if(typeof showMe_backgroundColorGradient==="undefined"){var showMe_backgroundColorGradient=false;}
+if(typeof showMe_backgroundColorGradient==="undefined"){var showMe_backgroundColorGradient=true;}
 if(typeof showMe_ambilight==="undefined"){var showMe_ambilight=1;}
 if(typeof showMe_effect==="undefined"){var showMe_effect='slide';}
 if(typeof showMe_opacity==="undefined"){var showMe_opacity='1';}
@@ -169,7 +169,7 @@ function showMe_afficher(){
 		if(!jQuery.browser.mobile){
 			$(document).on("dblclick",'',function(event){ecrireLog('dblClick');showMe_actionOnDoubleTap(event);});
 		}
-		window.addEventListener('wheel',function(e){showMe_wheel(e);});
+		//window.addEventListener('wheel',function(e){showMe_wheel(e);});
 		showMe_entrerFullScreen();
 		addTouchScroll();		
 	}else{
@@ -578,7 +578,6 @@ function showMe_wheel(event){
 	}
 }
 function showMe_actionOnDoubleTap(event){
-	/*
 	showMe_recupererDimension();
 	if((showMe_A[showMe_current]['reelW']>showMe_A[showMe_current]['w'])||(showMe_A[showMe_current]['reelH']>showMe_A[showMe_current]['h'])){
 		if(parseInt($('#showMe_elem'+showMe_current).css('width'))==showMe_A[showMe_current]['w']){//on agrandit au max
@@ -591,7 +590,7 @@ function showMe_actionOnDoubleTap(event){
 		}else{//on redimensionne a la taille d'origine
 			showMe_redimensionnerImageTailleEcran();
 		}
-	}*/
+	}
 }
 function showMe_zoom(pPourcentage){
 	if(pPourcentage==100){
