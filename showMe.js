@@ -167,7 +167,7 @@ function showMe_afficher(){
 		$(document).on("click",'#showMe_toLeft',function(event){showMe_effetAfficher(showMe_effect,'left');});
 		$(document).on("click",'#showMe_toRight',function(event){showMe_effetAfficher(showMe_effect,'right');});
 		if(!jQuery.browser.mobile){
-			$(document).on("dblclick",'',function(event){ecrireLog('dblClick');showMe_actionOnDoubleTap(event);});
+			//$(document).on("dblclick",'#showMe_FS li',function(event){ecrireLog('dblClick');showMe_actionOnDoubleTap(event);});
 		}
 		//window.addEventListener('wheel',function(e){showMe_wheel(e);});
 		showMe_entrerFullScreen();
@@ -415,7 +415,7 @@ function addTouchScroll(){
 
 				bindUIEvents: function() {
 					this.el.holder.on("touchstart", function(event){
-						showMe_recupererDimension();
+						//showMe_recupererDimension();
 						if(event.touches.length == 2){
 							scaling=true;
 							slider.pinchStart(event);
@@ -486,6 +486,7 @@ function addTouchScroll(){
 				move: function(event){
 					// Continuously return touch position.
 					this.touchmovex=event.originalEvent.touches[0].pageX;
+					$('#showMe_info').html(this.touchmovex);
 					// Calculate distance to translate holder.
 					this.movex=(this.touchmovex - this.touchstartx);
 					if(showMe_effect=='cube'){
@@ -588,6 +589,7 @@ function showMe_actionOnDoubleTap(event){
 			showMe_zoom(100);
 			scaling=true;
 		}else{//on redimensionne a la taille d'origine
+			ecrireLog('Affichage taille Ecran de '+showMe_current+'...');
 			showMe_redimensionnerImageTailleEcran();
 		}
 	}
@@ -605,8 +607,8 @@ function showMe_zoom(pPourcentage){
 		$('#showMe_elem'+showMe_current).parent().css('width',showMe_A[showMe_current]['reelW']);
 		$('#showMe_elem'+showMe_current).parent().css('height',showMe_A[showMe_current]['reelH']);
 		$('#showMe_toLeft,#showMe_toRight').hide();
-		$('#showMe_elem'+showMe_current).parent().parent().css('marginLeft',-((showMe_A[showMe_current]['reelW']-showMe_width)/2));
-		$('#showMe_elem'+showMe_current).parent().parent().css('marginTop',-((showMe_A[showMe_current]['reelH']-showMe_height)/2));
+		//$('#showMe_elem'+showMe_current).parent().parent().css('marginLeft',-((showMe_A[showMe_current]['reelW']-showMe_width)/2));
+		//$('#showMe_elem'+showMe_current).parent().parent().css('marginTop',-((showMe_A[showMe_current]['reelH']-showMe_height)/2));
 	}else{
 		var pourc=(pPourcentage/100);
 		var styles={
