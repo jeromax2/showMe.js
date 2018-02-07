@@ -22,6 +22,7 @@ if(typeof showMe_ambilight==="undefined"){var showMe_ambilight=1;}
 if(typeof showMe_effect==="undefined"){var showMe_effect='slide';}
 if(typeof showMe_opacity==="undefined"){var showMe_opacity='1';}
 if(typeof showMe_speedEffect==="undefined"){var showMe_speedEffect='200';}//millisecondes
+if(typeof showMe_goto==="undefined"){var showMe_goto='Go to ';}//millisecondes
 var showMe_visibleFace=1;
 var showMe_width;
 var showMe_height;
@@ -44,6 +45,8 @@ function showMe(pSelecteur){
 		showMe_A[i]['h']='';
 		showMe_A[i]['reelW']='';
 		showMe_A[i]['reelH']='';
+		showMe_A[i]['fileSize']='';
+		showMe_A[i]['link']=(($(this).attr('data-link')!=undefined)?$(this).attr('data-link'):'');
 		var href=$(this).attr('href').toLowerCase();
 		if(href.endsWith('.mp4')){
 			showMe_A[i]['type']='vid';
@@ -63,6 +66,9 @@ function showMe(pSelecteur){
 		}else if((href.endsWith('.jpg'))||(href.endsWith('.jpeg'))||(href.endsWith('.gif'))||(href.endsWith('.png'))||(href.endsWith('.webp'))){// c'est une image
 			showMe_A[i]['type']='img';
 			showMe_A[i]['html']='<img id="showMe_elem'+i+'" src="'+showMe_A[i]['href']+'">';
+			if(showMe_A[i]['link']!=''){
+				showMe_A[i]['html']='<a class="showMe_link" target="_blank" title="'+showMe_goto+showMe_A[i]['link']+'" href="'+showMe_A[i]['link']+'">'+showMe_A[i]['html']+'</a>';
+			}
 		}else{//open in iframe
 			showMe_A[i]['type']='iframe';
 			showMe_A[i]['html']='<iframe id="showMe_elem'+i+'" style="width:90%;height:90%;" src="'+showMe_A[i]['href']+'">Loading...</iframe>';
@@ -123,6 +129,8 @@ function showMe_afficher(){
 		html+='.showMe_navigation{position:absolute;display:flex;align-items:center;top:0;width:30px;height:100%;z-index:1000;padding:20px;text-shadow:0 0 1px #000000;transition:0.2s all;color:#fff;font-size:3em;cursor:pointer;text-shadow:0 0 2px #000;opacity:0.1;}';
 		html+='.showMe_navigation:hover{opacity:1;transition:0.1s all;}';
 		html+='.showMe_html>*{display:block!important;}';
+		html+='.showMe_link img{border:1px transparent solid!important;border-radius:7px!important;transition:0.5s all;}';
+		html+='.showMe_link:hover img{border:1px #fff solid!important;}';
 		html+='.ms-touch.slider{overflow-x:scroll;overflow-y:hidden;-ms-overflow-style:none;-ms-scroll-chaining: none;-ms-scroll-snap-type: mandatory;-ms-scroll-snap-points-x: snapInterval(0%, 100%);}';
 		html+='.animate{transition: transform 0.3s ease-out;}';
 		if(showMe_effect=='cube'){
