@@ -21,8 +21,9 @@ if(typeof showMe_backgroundColorGradient==="undefined"){var showMe_backgroundCol
 if(typeof showMe_ambilight==="undefined"){var showMe_ambilight=1;}
 if(typeof showMe_effect==="undefined"){var showMe_effect='slide';}
 if(typeof showMe_opacity==="undefined"){var showMe_opacity='1';}
+if(typeof showMe_GpsLink==="undefined"){var showMe_GpsLink='https://www.google.com/maps/place/';}
 if(typeof showMe_speedEffect==="undefined"){var showMe_speedEffect='200';}//millisecondes
-if(typeof showMe_goto==="undefined"){var showMe_goto='Go to ';}//millisecondes
+if(typeof showMe_goto==="undefined"){var showMe_goto='Go to ';}//traduction
 var showMe_visibleFace=1;
 var showMe_width;
 var showMe_height;
@@ -46,6 +47,7 @@ function showMe(pSelecteur){
 		showMe_A[i]['reelW']='';
 		showMe_A[i]['reelH']='';
 		showMe_A[i]['fileSize']='';
+		showMe_A[i]['gps']=(($(this).attr('data-gps')!=undefined)?$(this).attr('data-gps'):'');
 		showMe_A[i]['link']=(($(this).attr('data-link')!=undefined)?$(this).attr('data-link'):'');
 		var href=$(this).attr('href').toLowerCase();
 		if(href.endsWith('.mp4')){
@@ -124,7 +126,9 @@ function showMe_afficher(){
 		html+='#showMe_list{width:300%;height:100%;list-style-type:none;padding:0;margin:0;margin-left:-100%;}';
 		html+='#showMe_list li{float:left;position:relative;display:flex!important;align-items:center;padding:0;margin:0;text-align:center!important;vertical-align:middle;}';
 		html+='#showMe_list li>*{border-radius:7px;margin-left:auto;margin-right:auto;max-width:98%;max-height:98%;box-shadow:4px 4px 20px #000;vertical-align:middle;}';
-		html+='#showMe_info{position:fixed;bottom:5px;background-color:transparent;color:#fff;z-index:10001;width:100%;text-shadow:0 1px 2px #000;font-size:1.5em;}';
+		html+='.showMe_gps{display:inline-block;width:18px;height:18px;color:#fff;text-decoration:none;border-radius:20px;padding:1px;transform:rotateZ(0deg);transition:all 1s;}';
+		html+='.showMe_gps:hover{background-color:rgba(255,255,255,0.6);transform:rotateZ(360deg);transition:all 0.3s;}';
+		html+='#showMe_info{position:fixed;background-color:transparent;color:#fff;bottom:5px;z-index:10001;width:100%;text-shadow:0 1px 2px #000;font-size:1.5em;}';
 
 		html+='.showMe_navigation{position:absolute;display:flex;align-items:center;top:0;width:30px;height:100%;z-index:1000;padding:20px;text-shadow:0 0 1px #000000;transition:0.2s all;color:#fff;font-size:3em;cursor:pointer;text-shadow:0 0 2px #000;opacity:0.1;}';
 		html+='.showMe_navigation:hover{opacity:1;transition:0.1s all;}';
@@ -213,7 +217,13 @@ function showMe_effetAfficher(pTypeEffect,pDirection){
 	ecrireLog('Affichage de l\'element '+showMe_A[showMe_current]['title']+'...');
 	calculPrevNext();
 	window.location.href='#showMe'+showMe_current;
-	$('#showMe_info').html(showMe_A[showMe_current]['title']+' <span style="font-size:0.5em;">'+(showMe_current+1)+'/'+showMe_nbElement+'</span>');//+showMe_prev+'/'+showMe_current+'/'+showMe_next
+	var info=showMe_A[showMe_current]['title']+' <span style="font-size:0.5em;">';
+	if(showMe_A[showMe_current]['gps']!=''){
+		info+='<a class="showMe_gps" title="GPS" href="'+showMe_GpsLink+showMe_A[showMe_current]['gps']+'" target="_blank">&#8982;</a>';
+	}
+	info+=' '+(showMe_current+1)+'/'+showMe_nbElement;
+	info+='</span>';
+	$('#showMe_info').html(info);//+showMe_prev+'/'+showMe_current+'/'+showMe_next
 	var newElem=null;
 	if(pTypeEffect=='fade'){
 		if(pDirection=='left'){//fleche gauche
@@ -663,6 +673,7 @@ function showMe_infoElement(){
 	info+='h: '+showMe_A[showMe_current]['h']+'<br>';
 	info+='reelW: '+showMe_A[showMe_current]['reelW']+'<br>';
 	info+='reelH: '+showMe_A[showMe_current]['reelH']+'<br>';
+	info+='GPS: <a href="https://www.google.com/maps/place/'+showMe_A[showMe_current]['gps']+'" target="_blank">'+showMe_A[showMe_current]['gps']+'</a><br>';
 	$('#showMe_info').html(info);
 }
 function showMe_removeUrlHash(){history.pushState('', document.title, window.location.pathname);}

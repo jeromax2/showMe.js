@@ -32,7 +32,7 @@ var showMe_log=false;
 <a class="showMe" href="pic-pexels-photo.JPG" data-link="https://www.google.fr/search?q=beautiful+picture&newwindow=1&source=lnms&tbm=isch" title="jpg file" target="_blank">
 	<img src="vignette_pic-pexels-photo.JPG">
 </a>
-<a class="showMe" href="pic-pexels-photo-260024.png" title="png file" target="_blank">
+<a class="showMe" href="pic-pexels-photo-260024.png" data-gps="-8.8961111111111,116.28888888889" title="png file" target="_blank">
 	<img src="vignette_pic-pexels-photo-260024.png">
 </a>
 <a class="showMe" href="chanteur.gif" title="Animated gif" target="_blank">
@@ -65,7 +65,7 @@ var showMe_log=false;
 
 <div style="position:fixed;z-index:-1;top:150px;font-weight:700;font-size:100px;transform:rotate(-45deg);color:rgba(255,255,255,0.4);text-shadow:1px 1px 1px rgba(150,150,150,0.4);">ShowME.js</div>
 <br>
-<fieldset style="width:360px;border-radius:7px;position:fixed;top:150px;background-color:rgba(255,255,255,0.3);">
+<fieldset style="width:360px;border-radius:7px;position:fixed;top:150px;background-color:rgba(255,255,255,0.5);">
 <i>Change value if you want then click on thumbnail :</i>
 <table>
 <tr>
@@ -111,6 +111,7 @@ Download the latest <a href="https://github.com/jeromax2/showMe.js" target="_bla
 	<li>showMe grabs the "href" of these elements, analyse them and opens its in slide show</li>
 	<li>Title of links is shown at the bottom of the screen when slideshow is on</li>
 	<li>if attribute "data-link" is filled, a link is put on picture and a click on it send user towards this link</li>
+	<li>if attribute "data-gps" is filled, the symbol &#8982; is put at the bottom of the screen to link towards a maps with gps coordinates</li>
 	<li>For html content, "href"" must end with "showMe_html" and you have to add attribut called "data-showMeRel" which contains id of element which will be displayedn in the slideshow</li>
 	<li>Javascript parameters you can add in your web page :<ul>
 		<li><b>var showMe_backgroundColor='#1e1e1e';</b><br>
@@ -132,6 +133,9 @@ Download the latest <a href="https://github.com/jeromax2/showMe.js" target="_bla
 		</li>
 		<li><b>var showMe_Opacity='1';</b><br>
 			Opacity of background. Let see or not the web page under
+		</li>
+		<li><b>var showMe_GpsLink='https://www.google.com/maps/place/';</b><br>
+			Map link which accept gps coordinates like : -8.8961111111111,116.28888888889
 		</li>
 	</ul></li>
 </ul>
