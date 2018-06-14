@@ -126,8 +126,8 @@ function showMe_afficher(){
 		html+='#showMe_list{width:300%;height:100%;list-style-type:none;padding:0;margin:0;margin-left:-100%;}';
 		html+='#showMe_list li{float:left;position:relative;display:flex!important;align-items:center;padding:0;margin:0;text-align:center!important;vertical-align:middle;}';
 		html+='#showMe_list li>*{border-radius:7px;margin-left:auto;margin-right:auto;max-width:98%;max-height:98%;box-shadow:4px 4px 20px #000;vertical-align:middle;}';
-		html+='.showMe_gps{display:inline-block;width:18px;height:18px;color:#fff;text-decoration:none;border-radius:20px;padding:1px;transform:rotateZ(0deg);transition:all 1s;}';
-		html+='.showMe_gps:hover{background-color:rgba(255,255,255,0.6);transform:rotateZ(360deg);transition:all 0.3s;}';
+		html+='.showMe_gps{background-color:rgba(255,255,255,0);display:inline-block;font-weight:700;font-size:20px;width:20px;height:20px;line-height:15px;text-align:center;color:#fff;text-decoration:none;border-radius:20px;padding:2px;transition:all 1s;}';
+		html+='.showMe_gps:hover{background-color:rgba(255,255,255,0.6);transition:all 0.3s;}';
 		html+='#showMe_info{position:fixed;background-color:transparent;color:#fff;bottom:5px;z-index:10001;width:100%;text-shadow:0 1px 2px #000;font-size:1.5em;}';
 
 		html+='.showMe_navigation{position:absolute;display:flex;align-items:center;top:0;width:30px;height:100%;z-index:1000;padding:20px;text-shadow:0 0 1px #000000;transition:0.2s all;color:#fff;font-size:3em;cursor:pointer;text-shadow:0 0 2px #000;opacity:0.1;}';
